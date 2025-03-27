@@ -47,7 +47,7 @@ const CreateEmailFactory = (data, user, session) => {
     if (!data.Type) throw new Error(
         libs.messages.errorMessage.emailTypeNotProvided
     )
-
+    console.log(data)
     data.to = data?.to ?? data?.email;
     if (!data.to) throw new Error(libs.messages.errorMessage.emailNotProvidedWhereToSendMail);
     switch (data.Type) {

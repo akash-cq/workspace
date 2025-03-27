@@ -66,7 +66,7 @@ async function createTwoFactorToken(user, payload) {
       `${libs.constants.sessionPrefix}:twofactor:${jwtToken}`,
       token,
       "EX",
-      libs.constants.twoFactorAuthExpireTime_Seconds
+      libs.constants.twoFactorAuthExpireTime_Seconds*1000/2 
     );
     return jwtToken;
   } catch (error) {
