@@ -1002,7 +1002,7 @@ const setLastSeenOfChannel = async (payload) => {
                 WHERE ${userChannelDataModel.columnName.channel_id} = '${channelId}' AND \
                     ${userChannelDataModel.columnName.user_id} = '${userId}'
             `
-        console.log("q1 = ", q1);
+        // console.log("q1 = ", q1);
         const res1 = await pool.query(q1);
         return {msg: "Done"};
     } catch (error) {

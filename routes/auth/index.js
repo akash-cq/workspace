@@ -8,6 +8,7 @@ const emailService = require('../../services/emailService');
 const libs = require('../../lib');
 const middlewares = require('../../middlewares');
 const config = require('../../config/configVars');
+const services = require('../../services');
 
 router.post('/login', async (req, res) => {
     try {
@@ -18,7 +19,17 @@ router.post('/login', async (req, res) => {
         if ( !libs.regex.email.test(email) ) {
             return res.status(400).json({error: `Email is not valid.`});
         }
-        const [token, longTermToken] = await controllers.authController.login({email, password, rememberMe});
+        const [token, longTermToken,tfToken] = await controllers.authController.login({email, password, rememberMe,type:libs.constants.login.normal});
+        if (tfToken) {
+           res.cookie("tjwt", tfToken, {
+            ...configVars.sessionCookieConfig,
+            maxAge: libs.constants.twoFactorAuthExpireTime_Seconds * 1000,
+          });
+          return res.status(403).json({
+            error:
+              "2 factor Authentication is enabled please check your email for OTP",
+          });
+        }
         if (longTermToken) {
             res.cookie(
                 'ljwt', longTermToken, 
@@ -29,7 +40,7 @@ router.post('/login', async (req, res) => {
             )
         }
         res.cookie('jwt', token, configVars.sessionCookieConfig)
-        return res.json({ 'status': 'Success' });
+        return res.json({ status: 'Success' });
     } catch (error) {
         console.log(error);
         return res.json({error: error?.message});
@@ -165,6 +176,52 @@ router.post('/resetPassword', async (req, res) => {
         return res.json({error: error?.message ?? error});
     }
 })
+
+router.post("/twofactor", async (req, res) => {
+  try {
+    const { twofactor } = req.body;
+    if (!twofactor) throw new Error("2 factor authentication code is required");
+    const Ntoken = req.cookies.tjwt;
+    if (!Ntoken) throw new Error("session is expired");
+    const decode = jwt.decode(Ntoken);
+    if (!decode) throw new Error("Token is not valid");
+    const { email, password, rememberMe, type } = decode;
+    const otp = await services.redisService.sessionRedis(
+      "get",
+      `${libs.constants.sessionPrefix}:twofactor:${Ntoken}`
+    );
+    await services.redisService.sessionRedis(
+      "del",
+      `${libs.constants.sessionPrefix}:twofactor:${Ntoken}`
+    );
+    if (type !== libs.constants.login.twofactor)
+      throw new Error("Invalid token type");
+    if (otp != twofactor)
+      throw new Error("Invalid 2 factor authentication code");
+
+    const [token, longTermToken,tfToken] = await controllers.authController.login({
+      email,
+      password,
+      rememberMe,
+      type: libs.constants.login.twofactor,
+    });
+    if (token === null) {
+      throw new Error("something wrong with token");
+    }
+    if (longTermToken) {
+      res.cookie("ljwt", longTermToken, {
+        ...configVars.sessionCookieConfig,
+        maxAge: libs.constants.longTermSessionExpireTime_Seconds,
+      });
+    }
+    res.cookie("jwt", token, configVars.sessionCookieConfig);
+    res.clearCookie("tjwt");
+    return res.json({ status: "Success" });
+  } catch (error) {
+    console.log(error);
+    return res.json({ error: error?.message });
+  }
+});
 
 router.all('/logout', middlewares.session.checkLogin(true), async (req, res) => {
     try {

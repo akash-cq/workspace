@@ -51,39 +51,79 @@ const CreateEmailFactory = (data, user, session) => {
     data.to = data?.to ?? data?.email;
     if (!data.to) throw new Error(libs.messages.errorMessage.emailNotProvidedWhereToSendMail);
     switch (data.Type) {
-        case libs.constants.emailType.NewUser: {
-            if (!data.token) throw new Error(libs.messages.errorMessage.newUserTokenMissing);
-            if (!user) throw new Error(libs.messages.errorMessage.userDataMissingEmailFactory);
-            const emailData = libs.constants.emailContent[data.Type];
-            return new EmailClass({data: data, emailData: emailData, user: user});
-        }
-        case libs.constants.emailType.WorkspaceInvite: {
-            if (!data.workspaceId) throw new Error(libs.messages.errorMessage.workspaceInviteMissingWorkSpaceId)
-            if (!user) throw new Error(libs.messages.errorMessage.userDataMissingEmailFactory);
-            const emailData = libs.constants.emailContent[data.Type];
-            return new EmailClass({data: data, emailData: emailData, user: user});
-        }
-        case libs.constants.emailType.ForgotPassword: {
-            if (!data.token) throw new Error(libs.messages.errorMessage.varificationTokenNotPresent);
-            if (!user) throw new Error(libs.messages.errorMessage.userDataMissingEmailFactory);
-            const emailData = libs.constants.emailContent[data.Type];
-            return new EmailClass({data: data, emailData: emailData, user: user});
-        }
-        case libs.constants.emailType.ChannelInvite: {
-            if (!data.token) throw new Error(libs.messages.errorMessage.varificationTokenNotPresent);
-            if (!user) throw new Error(libs.messages.errorMessage.userDataMissingEmailFactory);
-            const emailData = libs.constants.emailContent[data.Type];
-            return new EmailClass({data: data, emailData: emailData, user: user});
-        }
-        case libs.constants.emailType.UserAndChannelInvite: {
-            if (!data.token) throw new Error(libs.messages.errorMessage.varificationTokenNotPresent);
-            if (!user) throw new Error(libs.messages.errorMessage.userDataMissingEmailFactory);
-            const emailData = libs.constants.emailContent[data.Type];
-            return new EmailClass({data: data, emailData: emailData, user: user});
-        }
-        default: {
-            throw new Error(libs.messages.errorMessage.invalidEmailType)
-        }
+      case libs.constants.emailType.NewUser: {
+        if (!data.token)
+          throw new Error(libs.messages.errorMessage.newUserTokenMissing);
+        if (!user)
+          throw new Error(
+            libs.messages.errorMessage.userDataMissingEmailFactory
+          );
+        const emailData = libs.constants.emailContent[data.Type];
+        return new EmailClass({ data: data, emailData: emailData, user: user });
+      }
+      case libs.constants.emailType.WorkspaceInvite: {
+        if (!data.workspaceId)
+          throw new Error(
+            libs.messages.errorMessage.workspaceInviteMissingWorkSpaceId
+          );
+        if (!user)
+          throw new Error(
+            libs.messages.errorMessage.userDataMissingEmailFactory
+          );
+        const emailData = libs.constants.emailContent[data.Type];
+        return new EmailClass({ data: data, emailData: emailData, user: user });
+      }
+      case libs.constants.emailType.ForgotPassword: {
+        if (!data.token)
+          throw new Error(
+            libs.messages.errorMessage.varificationTokenNotPresent
+          );
+        if (!user)
+          throw new Error(
+            libs.messages.errorMessage.userDataMissingEmailFactory
+          );
+        const emailData = libs.constants.emailContent[data.Type];
+        return new EmailClass({ data: data, emailData: emailData, user: user });
+      }
+      case libs.constants.emailType.ChannelInvite: {
+        if (!data.token)
+          throw new Error(
+            libs.messages.errorMessage.varificationTokenNotPresent
+          );
+        if (!user)
+          throw new Error(
+            libs.messages.errorMessage.userDataMissingEmailFactory
+          );
+        const emailData = libs.constants.emailContent[data.Type];
+        return new EmailClass({ data: data, emailData: emailData, user: user });
+      }
+      case libs.constants.emailType.UserAndChannelInvite: {
+        if (!data.token)
+          throw new Error(
+            libs.messages.errorMessage.varificationTokenNotPresent
+          );
+        if (!user)
+          throw new Error(
+            libs.messages.errorMessage.userDataMissingEmailFactory
+          );
+        const emailData = libs.constants.emailContent[data.Type];
+        return new EmailClass({ data: data, emailData: emailData, user: user });
+      }
+      case libs.constants.emailType.twofactorAuth: {
+        if (!data.token)
+          throw new Error(
+            libs.messages.errorMessage.varificationTokenNotPresent
+          );
+        if (!user)
+          throw new Error(
+            libs.messages.errorMessage.userDataMissingEmailFactory
+          );
+        const emailData = libs.constants.emailContent[data.Type];
+        return new EmailClass({ data: data, emailData: emailData, user: user });
+      }
+      default: {
+        throw new Error(libs.messages.errorMessage.invalidEmailType);
+      }
     }
 }
 

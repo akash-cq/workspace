@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuotient</title>
+</head>
+<body>
+    <h2>Hello <%=locals.displayname%></h2>
+
+    <h4>you are requesting security code for the 2 factor Authentication <b>(2FA)</b>.</h4>
+    <br>
+    <br>
+    <span>Valid upto <b>5 Min</b></span>
+    <span>your 2FA security code <b><%= locals.token%></b></span>
+    <span>Do not share this code with anyone</span>
+    <br>
+    <span>if you did not request this code, please ignore this email</span>
+    <br>
+    <span>Thanks</span><br>
+    <span style="color:rgba(194, 60, 11, 0.686);"><b>CodeQuotient</b></span><br>
+    <span>Team</span>   
+</body>
+</html>

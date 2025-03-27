@@ -17,7 +17,7 @@ module.exports = function(socket, io) {
             const userId = socket.userData.userId;
 
             socket.join(workspaceId);
-            console.log(`UserId ${userId} joined the workspace ${workspaceId}`);
+            // console.log(`UserId ${userId} joined the workspace ${workspaceId}`);
             userController.setLastActiveData({workspaceId, userId});
             if (ack)    ack();
         } catch (error) {
@@ -62,7 +62,7 @@ module.exports = function(socket, io) {
 
             let userChannelDataObj = await channelController.getUserChannelDataObj({channelId, userId}) || {};
 
-            console.log(`UserId ${userId} joined the channel ${channelId}`);
+            // console.log(`UserId ${userId} joined the channel ${channelId}`);
             if (ack)    ack(userChannelDataObj);
 
             io.to(channelId).emit('userJoinedChannel', {userId, channelId});

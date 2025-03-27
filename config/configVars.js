@@ -3,41 +3,44 @@ const constants = require('../lib/constants');
 const baseConfig = function({env}) {
     if ( env == "production") {
         return {
-            host: 'https://backend.workspace.codequotient.com', 
-            frontendURL: 'https://workspace.codequotient.com',
-            cloudStorageUrl: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com`,
-            sessionCookieConfig: {
-                domain: '.workspace.codequotient.com',
-                path: '/',
-                httpOnly: true,
-                secure: true,
-            }
-        }
+          host: "https://backend.workspace.codequotient.com",
+          frontendURL: "https://workspace.codequotient.com",
+          cloudStorageUrl: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com`,
+          sessionCookieConfig: {
+            domain: ".workspace.codequotient.com",
+            path: "/",
+            httpOnly: true,
+            secure: true,
+            maxAge: 60 * 60 * 1000,
+          },
+        };
     }
     else if (env == "testing") {
         return {
-            host: 'https://ws-backend.cqtestga.com',
-            frontendURL: 'https://workspace.cqtestga.com',
-            cloudStorageUrl: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com`,
-            sessionCookieConfig: {
-                domain: '.cqtestga.com',
-                path: '/',
-                httpOnly: true,
-                secure: true,
-            }
-        }
+          host: "https://ws-backend.cqtestga.com",
+          frontendURL: "https://workspace.cqtestga.com",
+          cloudStorageUrl: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com`,
+          sessionCookieConfig: {
+            domain: ".cqtestga.com",
+            path: "/",
+            httpOnly: true,
+            secure: true,
+            maxAge: 60 * 60 * 1000,
+          },
+        };
     }
     else {
         return {
-            host: `http://localhost:${constants.listenPort}`,
-            frontendURL: `http://localhost:3000`,
-            cloudStorageUrl: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com`,
-            sessionCookieConfig: {
-                domain: '.localhost',
-                path: '/',
-                httpOnly: true,
-            }
-        }
+          host: `http://localhost:${constants.listenPort}`,
+          frontendURL: `http://localhost:3000`,
+          cloudStorageUrl: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com`,
+          sessionCookieConfig: {
+            domain: ".localhost",
+            path: "/",
+            httpOnly: true,
+            maxAge: 60 * 60 * 1000,
+          },
+        };
     }
 } ( { env: process.env.NODE_ENV } )
 

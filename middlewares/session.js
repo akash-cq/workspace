@@ -1,4 +1,3 @@
-
 const jwt = require('jsonwebtoken');
 
 const controllers = require('../controllers');
@@ -48,6 +47,8 @@ const populateSession = async (req, res, next) => {
                 req.isAuthenticated = true;
                 req.session = sessionObj;
                 return next();
+            }else{
+                res.clearCookie('jwt');
             }
         }
         

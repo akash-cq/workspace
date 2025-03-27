@@ -8,8 +8,8 @@
     "start": "node server.js",
     "start:dev": "nodemon server.js",
     "migrate": "node-pg-migrate",
-    "up": "cross-env DATABASE_URL=postgres://<user>:<password>@localhost:5432/workspace node-pg-migrate up",
-    "down": "cross-env DATABASE_URL=postgres://<user>:<password>@localhost:5432/workspace node-pg-migrate down"
+    "up": "cross-env DATABASE_URL=postgres://postgres:akashgupta@localhost:5432/workspace node-pg-migrate up",
+    "down": "cross-env DATABASE_URL=postgres://postgres:akashgupta@localhost:5432/workspace node-pg-migrate down"
   },
   "repository": {
     "type": "git",
