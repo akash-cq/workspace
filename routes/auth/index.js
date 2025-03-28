@@ -217,6 +217,7 @@ router.post("/twofactor", async (req, res) => {
   try {
     const { twofactor } = req.body;
     if (!twofactor) throw new Error("2 factor authentication code is required");
+    if(!libs.regex.otpRegex.test(twofactor))throw new Error("otp type is not valid type !!!")
     const Ntoken = req.cookies.tjwt;
     if (!Ntoken) throw new Error("session is expired");
     const decode = jwt.decode(Ntoken);
@@ -276,11 +277,14 @@ router.get("/twofactorResend", async (req, res) => {
       "EX",
       (libs.constants.twoFactorAuthExpireTime_Seconds * 1000) / 2
     );
-    const emailInstance = emailService.CreateEmailFactory({
-      email: email,
-      Type: libs.constants.emailType.twofactorAuth,
-      token: token,
-    });
+    const emailInstance = emailService.CreateEmailFactory(
+      {
+        email: email,
+        Type: libs.constants.emailType.twofactorAuth,
+        token: token,
+      },
+      { displayname: decode.name }
+    );
     await emailInstance.sendEmail();
 
     return res.json({ status: "Success" });

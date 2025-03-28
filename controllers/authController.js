@@ -58,6 +58,7 @@ async function createTwoFactorToken(user, payload) {
         rememberMe: rememberMe,
         password: password,
         type: libs.constants.login.twofactor,
+        name: user.displayname,
       },
       libs.constants.jwtSecret
     );
@@ -108,9 +109,13 @@ const login = async (payload, byPassPasswordCheck) => {
     }
   }
   const isWant2fa = await checkLoginLimit(user.id);
-  if (isWant2fa && payload.type != libs.constants.login.twofactor) {
+  if (
+    isWant2fa &&
+    payload.type != libs.constants.login.twofactor &&
+    !byPassPasswordCheck
+  ) {
     const tfToken = await createTwoFactorToken(user, payload);
-    // console.log(tfToken);   
+    // console.log(tfToken);
     return [null, null, tfToken];
   }
 
